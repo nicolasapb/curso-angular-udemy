@@ -73,6 +73,10 @@ export class CategoryService {
     );
   }
 
+  /**
+   * DELETE Category
+   * @param id - Category ID to be deleted
+   */
   delete(id: number): Observable<Category> {
     const url = `${this.apiPath}/${id}`;
 

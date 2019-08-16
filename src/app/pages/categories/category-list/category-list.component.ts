@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { CategoryService } from '../shared/category.service';
 import { Category } from '../shared/category.model';
+import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-category-list',
@@ -11,6 +12,7 @@ import { Category } from '../shared/category.model';
 export class CategoryListComponent implements OnInit {
 
   public categories: Category[] = [];
+  public faPlusSquare = faPlusSquare;
 
   constructor(private categoryService: CategoryService) { }
 

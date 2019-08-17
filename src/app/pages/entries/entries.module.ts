@@ -4,9 +4,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { EntriesRoutingModule } from './entries-routing.module';
 import { EntryListComponent } from './entry-list/entry-list.component';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { EntryFormComponent } from './entry-form/entry-form.component';
 
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { CalendarModule } from 'primeng/calendar';
+import { IMaskModule } from 'angular-imask';
 
 @NgModule({
   declarations: [EntryListComponent, EntryFormComponent],
@@ -14,7 +16,9 @@ import { EntryFormComponent } from './entry-form/entry-form.component';
     CommonModule,
     EntriesRoutingModule,
     FontAwesomeModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    CalendarModule,
+    IMaskModule
   ]
 })
 export class EntriesModule { }

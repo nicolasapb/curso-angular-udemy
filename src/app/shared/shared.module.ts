@@ -4,9 +4,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
-
-
-
 @NgModule({
   declarations: [],
   imports: [

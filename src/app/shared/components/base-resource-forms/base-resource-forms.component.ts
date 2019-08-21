@@ -33,8 +33,8 @@ export abstract class BaseResourceFormComponent<T extends BaseResourceModel> imp
 
   ngOnInit() {
     this.setCurrentaction();
-    this.buildCategoryForm();
-    this.loadCategory();
+    this.buildResourceForm();
+    this.loadResource();
   }
 
   ngAfterContentChecked(): void {
@@ -45,80 +45,82 @@ export abstract class BaseResourceFormComponent<T extends BaseResourceModel> imp
     this.submittingForm = true;
 
     if (this.currencAction === 'new') {
-      this.createCategory();
+      this.createResource();
     } else {
-      this.updateCategory();
+      this.updateResource();
     }
   }
 
-  // PRIVATE METHODS
+  // PROTECTED METHODS
 
-  private setCurrentaction(): void {
+  protected setCurrentaction(): void {
     this.route.snapshot.url[0].path === 'new' ? this.currencAction = 'new' : this.currencAction = 'edit';
   }
 
-  private buildCategoryForm(): void {
-    this.categoryForm = this.formBuilder.group({
-      id: [null],
-      name: [null, [Validators.required, Validators.minLength(2)]],
-      description: [null]
-    });
-  }
-
-  private loadCategory(): void {
+  protected loadResource(): void {
     if (this.currencAction === 'edit') {
       this.route.paramMap
         .pipe(
-          switchMap(params => this.categoryService.getById(+params.get('id')))
+          switchMap(params => this.resourceService.getById(+params.get('id')))
         )
         .subscribe({
-          next: category => {
-            this.category = category;
-            this.categoryForm.patchValue(this.category);
+          next: resource => {
+            this.resource = resource;
+            this.resourceForm.patchValue(this.resource);
           },
           error: _ => alert('Ocorreu um erro no servidor')
         });
     }
   }
 
-  private setPageTitle(): void {
+  protected setPageTitle(): void {
     if (this.currencAction === 'new') {
-      this.pageTitle = 'Cadastro de nova Categoria';
+      this.pageTitle = this.creationPageTitle();
     } else {
-      const categoryName = this.category.name || '...';
-      this.pageTitle = `Editando a categoria: ${categoryName}`;
+      this.pageTitle = this.editionPageTitle();
     }
   }
-  private createCategory(): void {
-    const category: Category = Category.fromJson(this.categoryForm.value);
 
-    this.categoryService.create(category)
+  protected creationPageTitle(): string {
+    return 'Novo';
+  }
+
+  protected editionPageTitle(): string {
+    return 'Edição';
+  }
+
+  protected createResource(): void {
+    const resource: T = this.jsonDataToResourceFn(this.resourceForm.value);
+
+    this.resourceService.create(resource)
       .subscribe({
-        next: newCategory => this.actionsForSuccess(newCategory),
+        next: newResource => this.actionsForSuccess(newResource),
         error: error => this.actionsForError(error)
       });
   }
 
-  private updateCategory(): void {
-    const category: Category = Category.fromJson(this.categoryForm.value);
+  protected updateResource(): void {
+    const resource: T = this.jsonDataToResourceFn(this.resourceForm.value);
 
-    this.categoryService.update(category)
+    this.resourceService.update(resource)
       .subscribe({
-        next: newCategory => this.actionsForSuccess(newCategory),
+        next: newResource => this.actionsForSuccess(newResource),
         error: error => this.actionsForError(error)
       });
   }
 
-  private actionsForSuccess(category: Category): void {
+  protected actionsForSuccess(resource: T): void {
     toastr.success('Solicitação processada com sucesso');
 
-    this.router.navigateByUrl('categories', {skipLocationChange: true})
+    const baseComponentPath: string = this.route.snapshot.parent.url[0].path;
+
+    this.router.navigateByUrl(baseComponentPath, {skipLocationChange: true})
       .then(
-        () => this.router.navigate(['categories', category.id, 'edit'])
+        () => this.router.navigate([baseComponentPath, resource.id, 'edit'])
       );
   }
 
-  private actionsForError(error: any): void {
+  protected actionsForError(error: any): void {
     toastr.error('Ocorreu um erro ao processar a sua solicitação');
 
     this.submittingForm = false;
@@ -129,5 +131,7 @@ export abstract class BaseResourceFormComponent<T extends BaseResourceModel> imp
       this.serverErrorMessages = ['Falha na comunicação com o servidor. Por favor, tente  mais tarde'];
     }
   }
+
+  protected abstract buildResourceForm(): void;
 
 }

@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+
+import { BaseResourceList } from 'src/app/shared/components/base-resource-list/base-resource-list.component';
 
 import { CategoryService } from '../shared/category.service';
 import { Category } from '../shared/category.model';
+
 import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -9,36 +12,12 @@ import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
   templateUrl: './category-list.component.html',
   styleUrls: ['./category-list.component.css']
 })
-export class CategoryListComponent implements OnInit {
+export class CategoryListComponent extends BaseResourceList<Category> {
 
-  public categories: Category[] = [];
   public faPlusSquare = faPlusSquare;
 
-  constructor(private categoryService: CategoryService) { }
-
-  ngOnInit() {
-    this.categoryService.getAll()
-      .subscribe({
-          next: categories => this.categories = categories,
-          error: error => this.handleServiceError('erro ao carregar a lista', error)
-      });
-  }
-
-  deleteCategory(category: Category): void {
-    const mustDelete: boolean = confirm('Deseja realemente excluir este item?');
-
-    if (mustDelete) {
-      this.categoryService.delete(category.id)
-        .subscribe({
-          next: _ => this.categories = this.categories.filter(element => element !== category ),
-          error: error => this.handleServiceError('erro ao deletar a categoria', error)
-        });
-    }
-  }
-
-  private handleServiceError(operation: string, error: any): void {
-    alert(operation);
-    console.log(error);
-  }
+  constructor(protected categoryService: CategoryService) {
+    super(categoryService);
+   }
 
 }

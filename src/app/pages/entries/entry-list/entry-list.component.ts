@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+
+import { BaseResourceList } from 'src/app/shared/components/base-resource-list/base-resource-list.component';
 
 import { Entry } from '../shared/entry.model';
 import { EntryService } from '../shared/entry.service';
+
 import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -9,36 +12,12 @@ import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
   templateUrl: './entry-list.component.html',
   styleUrls: ['./entry-list.component.css']
 })
-export class EntryListComponent implements OnInit {
+export class EntryListComponent extends BaseResourceList<Entry> {
 
-  public entries: Entry[] = [];
   public faPlusSquare = faPlusSquare;
 
-  constructor(private entryService: EntryService) { }
-
-  ngOnInit() {
-    this.entryService.getAll()
-      .subscribe({
-          next: entries => this.entries = entries.sort((a, b) => b.id - a.id),
-          error: error => this.handleServiceError('erro ao carregar a lista', error)
-      });
-  }
-
-  deleteEntry(entry: Entry): void {
-    const mustDelete: boolean = confirm('Deseja realemente excluir este item?');
-
-    if (mustDelete) {
-      this.entryService.delete(entry.id)
-        .subscribe({
-          next: _ => this.entries = this.entries.filter(element => element !== entry ),
-          error: error => this.handleServiceError('erro ao deletar a categoria', error)
-        });
-    }
-  }
-
-  private handleServiceError(operation: string, error: any): void {
-    alert(operation);
-    console.log(error);
-  }
+  constructor(protected entryService: EntryService) {
+    super(entryService);
+   }
 
 }

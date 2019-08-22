@@ -19,7 +19,7 @@ export abstract class BaseResourceList<T extends BaseResourceModel> implements O
       });
   }
 
-  deleteEntry(resource: T): void {
+  deleteResource(resource: T): void {
     const mustDelete: boolean = confirm('Deseja realemente excluir este item?');
 
     if (mustDelete) {

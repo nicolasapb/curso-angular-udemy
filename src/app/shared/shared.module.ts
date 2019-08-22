@@ -5,9 +5,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { BreadCrumbComponent } from './components/bread-crumb/bread-crumb.component';
 import { RouterModule } from '@angular/router';
+import { PageHeaderComponent } from './components/page-header/page-header.component';
 
 @NgModule({
-  declarations: [BreadCrumbComponent],
+  declarations: [BreadCrumbComponent, PageHeaderComponent],
   imports: [
     CommonModule,
     RouterModule,
@@ -22,7 +23,8 @@ import { RouterModule } from '@angular/router';
     FontAwesomeModule,
 
     // Shared Components
-    BreadCrumbComponent
+    BreadCrumbComponent,
+    PageHeaderComponent
   ]
 })
 export class SharedModule { }

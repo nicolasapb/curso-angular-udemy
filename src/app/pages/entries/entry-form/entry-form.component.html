@@ -15,7 +15,7 @@
 <form [formGroup]="resourceForm" (submit)="submitForm()">
     
         <div class="card">
-            <div class="card-header">
+            <div class="card-header bg-dark text-white">
                 Informações sobre o Lançamento
             </div>
     
@@ -74,11 +74,11 @@
                              <label 
                                 (click)="resourceForm.get('paid').setValue(true)" 
                                 [class.active]="resourceForm.get('paid').value == true" 
-                                class="btn btn-outline-info">Pago</label>
+                                class="btn btn-outline-secondary">Pago</label>
                              <label 
                                 (click)="resourceForm.get('paid').setValue(false)" 
                                 [class.active]="resourceForm.get('paid').value == false" 
-                                class="btn btn-outline-info">Pendente</label>
+                                class="btn btn-outline-secondary">Pendente</label>
                          </div>
                          <app-form-field-error [form-control]="resourceForm.get('paid')"></app-form-field-error>
                     </div>

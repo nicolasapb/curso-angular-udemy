@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { faHome } from '@fortawesome/free-solid-svg-icons';
 
 interface BreadCrumbItem {
   text: string;
@@ -13,6 +14,7 @@ interface BreadCrumbItem {
 export class BreadCrumbComponent implements OnInit {
 
   @Input() items: Array<BreadCrumbItem> = [];
+  public faHome = faHome;
 
   constructor() { }
 

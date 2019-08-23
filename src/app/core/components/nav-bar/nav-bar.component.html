@@ -1,18 +1,18 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-  <a class="navbar-brand" routerLink="/">FINAN$YS</a>
+  <a class="navbar-brand" routerLink="/">FINAN<fa-icon [icon]="faDollarSign"></fa-icon>YS</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
       <li class="nav-item" routerLinkActive="active">
-        <a class="nav-link" routerLink="/reports">Relatórios</a>
+        <a class="nav-link" routerLink="/reports"><fa-icon [icon]="faChartLine"></fa-icon> Relatórios</a>
       </li>
       <li class="nav-item" routerLinkActive="active">
-        <a class="nav-link" routerLink="/entries">Lançamentos</a>
+        <a class="nav-link" routerLink="/entries"><fa-icon [icon]="faBalanceScale"></fa-icon> Lançamentos</a>
       </li>
       <li class="nav-item" routerLinkActive="active">
-        <a class="nav-link" routerLink="/categories">Categorias</a>
+        <a class="nav-link" routerLink="/categories"><fa-icon [icon]="faListAlt"></fa-icon> Categorias</a>
       </li> 
     </ul>
   </div>

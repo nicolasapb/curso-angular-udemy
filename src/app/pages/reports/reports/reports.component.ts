@@ -61,10 +61,65 @@ export class ReportsComponent implements OnInit {
       alert('Você precisa selecionar o mês e o ano para gerar o relatório');
     } else {
       this.entryService.getByMonthAndYear(month, year).subscribe({
-        next: entries => this.entries = entries,
+        next: this.setValues.bind(this),
         error: error => console.log(error)
       });
     }
+  }
+
+  private setValues(entries: Entry[]): void {
+    this.entries = entries;
+    this.calculateBalance();
+    this.setChartData();
+  }
+
+  private calculateBalance(): void {
+    let expenseTotal = 0;
+    let revenueTotal = 0;
+
+    this.entries.forEach( entry => {
+      if (entry.type === 'revenue') {
+        revenueTotal += currencyFormatter.unformat(entry.amount, {code: 'BRL'});
+      } else if (entry.type === 'expense') {
+        expenseTotal += currencyFormatter.unformat(entry.amount, {code: 'BRL'});
+      }
+    });
+
+    this.expenseTotal = currencyFormatter.format(expenseTotal, {code: 'BRL'});
+    this.revenueTotal = currencyFormatter.format(revenueTotal, {code: 'BRL'});
+    this.balance      = currencyFormatter.format(revenueTotal - expenseTotal, {code: 'BRL'});
+  }
+
+  private setChartData() {
+    this.revenueChartData = this.getChartData('revenue', 'Receitas', '#28a745');
+    this.expenseChartData = this.getChartData('expense', 'Despesas', '#dc3545');
+  }
+
+  private getChartData(entryType: string, title: string, color: string) {
+    const chartData = [];
+
+    this.categories.forEach( category => {
+      // filtering entries by category and type
+      const filteredEntries = this.entries.filter( entry => (entry.categoryId === category.id) && (entry.type === entryType) );
+
+      // if found entries, then sum entries amount and add to chartData
+      if (filteredEntries.length > 0) {
+        const totalAmount = filteredEntries.reduce( (total, entry) => total + currencyFormatter.unformat(entry.amount, {code: 'BRL'}), 0);
+        chartData.push({
+          categoryName: category.name,
+          totalAmount
+        });
+      }
+    });
+
+    return {
+      labels: chartData.map(item => item.categoryName),
+      datasets: [{
+        label: title,
+        backgroundColor: color,
+        data: chartData.map(item => item.totalAmount)
+      }]
+    };
   }
 
 }
